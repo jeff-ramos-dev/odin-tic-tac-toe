@@ -3,13 +3,6 @@ function Gameboard() {
     const columns = 3
     const board = []
 
-    for (let i = 0; i < rows; i++) {
-        board[i] = []
-        for (let j = 0; j < columns; j++) {
-            board[i].push(Cell())
-        }
-    }
-
     const getBoard = () => board
 
     const makeMark = (row, column, player) => {
@@ -17,7 +10,7 @@ function Gameboard() {
         for (let i = 0; i < 3; i++) {
             availableCells[i] = []
             for (let j = 0; j < 3; j++) {
-                if (board[i][j].getValue() === 0) {
+                if (board[i][j].getValue() === '-') {
                     availableCells[i].push(true)
                 } else {
                     availableCells[i].push(false)
@@ -45,16 +38,27 @@ function Gameboard() {
         console.log(boardWithCellValues)
     }
 
+    const clearBoard = () => {
+        for (let i = 0; i < rows; i++) {
+            board[i] = []
+            for (let j = 0; j < columns; j++) {
+                board[i].push(Cell())
+            }
+        }
+    }
+
+    clearBoard()
+
     return {
         getBoard,
         makeMark,
-        printBoard
+        printBoard,
+        clearBoard
     }
 }
 
-// Setup Cell objects
 function Cell() {
-    let value = 0;
+    let value = "-";
 
     const addMark = (player) => {
         value = player;
@@ -73,15 +77,16 @@ function GameController(
     playerTwoName = "Player Two"
 ) {
     const board = Gameboard()
+    let win = false
 
     const players = [
         {
             name: playerOneName,
-            token: 1
+            token: "X"
         },
         {
             name: playerTwoName,
-            token: 2
+            token: "O"
         }
     ];
 
@@ -97,6 +102,65 @@ function GameController(
         board.printBoard();
     };
 
+    const checkForWin = () => {
+        let rowCount = 0
+        let columnOneCount = 0
+        let columnTwoCount = 0
+        let columnThreeCount = 0
+        let diagTopLeftCount = 0
+        let diagBotLeftCount = 0
+        for (let i = 0; i < 3; i++) {
+            rowCount = 0
+            for (let j = 0; j < 3; j++) {
+                if (board.getBoard()[i][j].getValue() === getActivePlayer().token) {
+                    switch (j) {
+                        case (0):
+                            rowCount++
+                            columnOneCount++
+                            if (i === 0) {
+                                diagTopLeftCount++
+                            } else if (i === 2) {
+                                diagBotLeftCount++
+                            }
+                            break;
+                        case (1):
+                            rowCount++
+                            columnTwoCount++
+                            if (i === 1) {
+                                diagTopLeftCount++
+                                diagBotLeftCount++
+                            }
+                            break;
+                        case (2):
+                            rowCount++
+                            columnThreeCount++
+                            if (i === 0) {
+                                diagBotLeftCount++
+                            } else if (i === 2) {
+                                diagTopLeftCount++
+                            } 
+                            break; 
+                        default:
+                            break;
+                    }
+                    if (rowCount === 3 ||
+                        columnOneCount === 3 ||
+                        columnTwoCount === 3 ||
+                        columnThreeCount === 3 ||
+                        diagTopLeftCount === 3 ||
+                        diagBotLeftCount === 3
+                    ) {
+                        board.printBoard()
+                        console.log(`%c ${getActivePlayer().name} WON!!!`, 'color: cyan')
+                        switchPlayerTurn()
+                        board.clearBoard()
+                        return `${getActivePlayer().name}'s turn`
+                    }
+                }
+            }
+        }
+    }
+
     const playRound = (row, column) => {
         if (row > 2 || column > 2 || row < 0 || column < 0) {
             console.log('invalid cell')
@@ -107,14 +171,17 @@ function GameController(
             return `${getActivePlayer().name}'s turn`
         }
         console.log(`Adding ${getActivePlayer().name}'s mark to cell (${row}, ${column})`)
+        // check if player has won the game
+        checkForWin()
         
+         
         switchPlayerTurn();
         printNewRound();
         return `${getActivePlayer().name}'s turn`
     };
 
     printNewRound();
-    console.log("%c \"Player One's turn\"", 'color: cyan')
+    console.log(`%c "${getActivePlayer().name}'s turn"`, 'color: cyan')
 
     return {
        playRound,
