@@ -10,7 +10,7 @@ function Gameboard() {
         for (let i = 0; i < 3; i++) {
             availableCells[i] = []
             for (let j = 0; j < 3; j++) {
-                if (board[i][j].getValue() === '-') {
+                if (board[i][j].getValue() === '') {
                     availableCells[i].push(true)
                 } else {
                     availableCells[i].push(false)
@@ -27,17 +27,6 @@ function Gameboard() {
         return true
     }
 
-    const printBoard = () => {
-        let boardWithCellValues = ''
-        for (let i = 0; i < 3; i++) { 
-            boardWithCellValues += '\n'
-            for (let j = 0; j < 3; j++) {
-                boardWithCellValues += `${board[i][j].getValue()} `
-            }
-        }
-        console.log(boardWithCellValues)
-    }
-
     const clearBoard = () => {
         for (let i = 0; i < rows; i++) {
             board[i] = []
@@ -52,13 +41,12 @@ function Gameboard() {
     return {
         getBoard,
         makeMark,
-        printBoard,
         clearBoard
     }
 }
 
 function Cell() {
-    let value = "-";
+    let value = "";
 
     const addMark = (player) => {
         value = player;
@@ -77,6 +65,7 @@ function GameController(
     playerTwoName = "Player Two"
 ) {
     const board = Gameboard()
+
     let win = false
 
     const players = [
@@ -97,10 +86,6 @@ function GameController(
     }
 
     const getActivePlayer = () => activePlayer;
-
-    const printNewRound = () => {
-        board.printBoard();
-    };
 
     const checkForWin = () => {
         let rowCount = 0
@@ -150,43 +135,87 @@ function GameController(
                         diagTopLeftCount === 3 ||
                         diagBotLeftCount === 3
                     ) {
-                        board.printBoard()
-                        console.log(`%c ${getActivePlayer().name} WON!!!`, 'color: cyan')
-                        switchPlayerTurn()
-                        board.clearBoard()
-                        return `${getActivePlayer().name}'s turn`
+                        return true
                     }
                 }
             }
         }
+        return false
     }
 
     const playRound = (row, column) => {
         if (row > 2 || column > 2 || row < 0 || column < 0) {
             console.log('invalid cell')
-            return `${getActivePlayer().name}'s turn`
+            return false
         }
         const mark = board.makeMark(row, column, getActivePlayer().token);
         if (!mark) {
-            return `${getActivePlayer().name}'s turn`
+            return false
         }
-        console.log(`Adding ${getActivePlayer().name}'s mark to cell (${row}, ${column})`)
-        // check if player has won the game
-        checkForWin()
-        
-         
+
+        if (checkForWin()) {
+
+            return true
+        }
+
         switchPlayerTurn();
-        printNewRound();
-        return `${getActivePlayer().name}'s turn`
+        return false
     };
 
-    printNewRound();
-    console.log(`%c "${getActivePlayer().name}'s turn"`, 'color: cyan')
-
     return {
-       playRound,
-       getActivePlayer 
+        playRound,
+        getActivePlayer,
+        getBoard: board.getBoard,
     }
 }
 
-const game = GameController();
+
+function ScreenController() {
+    const game = GameController();
+    const playerTurnDiv = document.querySelector('.turn')
+    const boardDiv = document.querySelector('.board')
+
+    let win = false
+
+    const updateScreen = () => {
+        boardDiv.textContent = ''
+
+        const board = game.getBoard()
+        const activePlayer = game.getActivePlayer()
+
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const cellButton = document.createElement('button')
+                cellButton.classList.add('cell')
+                cellButton.dataset.row = i
+                cellButton.dataset.column = j
+                cellButton.textContent = board[i][j].getValue()
+                boardDiv.appendChild(cellButton)
+            }
+        }
+
+        if (win) {
+            playerTurnDiv.textContent = `${activePlayer.name} WON!!!`
+        }
+    }
+
+    function clickHandlerBoard(e) {
+        debugger
+        const selectedRow = e.target.dataset.row
+        const selectedColumn = e.target.dataset.column
+        if (!selectedRow || !selectedColumn) return
+
+        if (game.playRound(selectedRow, selectedColumn)) {
+            win = true
+        }
+        updateScreen()
+    }
+
+    boardDiv.addEventListener('click', clickHandlerBoard)
+
+    updateScreen()
+}
+
+ScreenController()
