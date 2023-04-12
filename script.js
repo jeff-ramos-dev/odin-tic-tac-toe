@@ -6,7 +6,7 @@ function Gameboard() {
 
     const getBoard = () => board
 
-    const makeMark = (row, column, player) => {
+    const makeMove = (row, column, token) => {
         const availableCells = [] 
         let r = rows
         let c = columns
@@ -25,7 +25,7 @@ function Gameboard() {
 
         if (!cell) return false
         
-        cell.addMark(player)
+        cell.addToken(token)
 
         return true
     }
@@ -43,7 +43,7 @@ function Gameboard() {
 
     return {
         getBoard,
-        makeMark,
+        makeMove,
         clearBoard
     }
 }
@@ -52,8 +52,8 @@ function Gameboard() {
 function Cell() {
     let value = "";
 
-    const addMark = (player) => {
-        value = player;
+    const addToken = (token) => {
+        value = token;
     }
 
     const getValue = () => value
@@ -247,11 +247,12 @@ function ScreenController() {
 
 ScreenController()
 
-    const reset = document.querySelector('.reset')
-    reset.addEventListener('click', (e) => {
-        e.preventDefault()
-        ScreenController()
-        const form = document.querySelector('.names')
-        form.classList.remove('hidden')
-        reset.style.display = 'none'
-    })
+const reset = document.querySelector('.reset')
+reset.addEventListener('click', (e) => {
+    e.preventDefault()
+    ScreenController()
+    const form = document.querySelector('.names')
+    form.classList.remove('hidden')
+    reset.style.display = 'none'
+})
+
