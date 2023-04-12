@@ -10,8 +10,20 @@
 </head>
 <body>
     <div class="container">
+        <form action="./index.html" method="post" class="names">
+            <div class="name-input">
+                <label for="playerOne">Player One</label>
+                <input type="text" name="playerOne" id="playerOne" placeholder="Please enter a name">
+            </div>
+            <div class="name-input">
+                <label for="playerTwo">Player Two</label>
+                <input type="text" name="playerTwo" id="playerTwo" placeholder="Please enter a name">
+            </div>
+            <button class="submit">START GAME</button>
+        </form>
       <h1 class="turn"></h1>
       <div class="board"></div>
     </div>
+      <button class="reset">RESET</button>
 </body>
 </html>

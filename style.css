@@ -1,3 +1,10 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
 body {
     display: grid;
     place-items: center;
@@ -6,6 +13,7 @@ body {
 
 
 .container {
+    position: relative;
     display: grid;
     grid-template-rows: 80px 1fr;
     margin-top: 100px;
@@ -29,4 +37,48 @@ body {
 
 button {
     font-size: 3rem;
+}
+
+.names {
+    position: absolute;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: purple;
+    height: 100%;
+    width: 100%;
+}
+
+.name-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.name-input label {
+    color: white;
+}
+
+.name-input input {
+    margin-top: 10px;
+    padding-left: 5px;
+    height: 30px;
+}
+
+.hidden {
+    display: none;
+}
+
+.submit, .reset {
+    font-size: 2rem;
+    margin-top: 20px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    background-color: green;
+}
+
+.reset {
+    background-color: red;
+    display: none;
 }

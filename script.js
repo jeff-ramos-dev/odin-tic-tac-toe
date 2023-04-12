@@ -1,3 +1,4 @@
+//GAMEBOARD FUNCTION
 function Gameboard() {
     const rows = 3
     const columns = 3
@@ -45,6 +46,7 @@ function Gameboard() {
     }
 }
 
+// CELL FUNCTION
 function Cell() {
     let value = "";
 
@@ -60,6 +62,7 @@ function Cell() {
     }
 }
 
+// GAME CONTROLLER FUNCTION
 function GameController(
     playerOneName = "Player One",
     playerTwoName = "Player Two"
@@ -78,6 +81,18 @@ function GameController(
             token: "O"
         }
     ];
+
+    const setPlayerNames = () => {
+        const playerOne = document.getElementById('playerOne')
+        const playerTwo = document.getElementById('playerTwo')
+        const form = document.querySelector('.names')
+        const playerTurnDiv = document.querySelector('.turn')
+        players[0].name = playerOne.value
+        players[1].name = playerTwo.value
+
+        playerTurnDiv.textContent = `${playerOne.value}'s turn`
+        form.classList.add('hidden')
+    }
 
     let activePlayer = players[0];
 
@@ -162,6 +177,14 @@ function GameController(
         return false
     };
 
+    const submit = document.querySelector('.submit')
+    submit.addEventListener('click', (e) => {
+        e.preventDefault()
+        setPlayerNames()
+        const reset = document.querySelector('.reset')
+        reset.style.display = 'block'
+    })
+
     return {
         playRound,
         getActivePlayer,
@@ -169,7 +192,7 @@ function GameController(
     }
 }
 
-
+// SCREEN CONTROLLER FUNCTION
 function ScreenController() {
     const game = GameController();
     const playerTurnDiv = document.querySelector('.turn')
@@ -198,11 +221,11 @@ function ScreenController() {
 
         if (win) {
             playerTurnDiv.textContent = `${activePlayer.name} WON!!!`
+            boardDiv.removeEventListener('click', clickHandlerBoard)
         }
     }
 
     function clickHandlerBoard(e) {
-        debugger
         const selectedRow = e.target.dataset.row
         const selectedColumn = e.target.dataset.column
         if (!selectedRow || !selectedColumn) return
@@ -215,7 +238,17 @@ function ScreenController() {
 
     boardDiv.addEventListener('click', clickHandlerBoard)
 
+
     updateScreen()
 }
 
 ScreenController()
+
+    const reset = document.querySelector('.reset')
+    reset.addEventListener('click', (e) => {
+        e.preventDefault()
+        ScreenController()
+        const form = document.querySelector('.names')
+        form.classList.remove('hidden')
+        reset.style.display = 'none'
+    })
