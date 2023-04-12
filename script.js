@@ -8,9 +8,11 @@ function Gameboard() {
 
     const makeMark = (row, column, player) => {
         const availableCells = [] 
-        for (let i = 0; i < 3; i++) {
+        let r = rows
+        let c = columns
+        for (let i = 0; i < r; i++) {
             availableCells[i] = []
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < c; j++) {
                 if (board[i][j].getValue() === '') {
                     availableCells[i].push(true)
                 } else {
@@ -109,10 +111,11 @@ function GameController(
         let columnThreeCount = 0
         let diagTopLeftCount = 0
         let diagBotLeftCount = 0
+        const token = getActivePlayer().token
         for (let i = 0; i < 3; i++) {
             rowCount = 0
             for (let j = 0; j < 3; j++) {
-                if (board.getBoard()[i][j].getValue() === getActivePlayer().token) {
+                if (board.getBoard()[i][j].getValue() === token) {
                     switch (j) {
                         case (0):
                             rowCount++
