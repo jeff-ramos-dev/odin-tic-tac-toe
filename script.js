@@ -175,9 +175,8 @@ function GameController(
         if (row > 2 || column > 2 || row < 0 || column < 0) {
             return false
         }
-
         const mark = board.makeMove(row, column, getActivePlayer().token);
-
+        
         if (!mark) {
             return false
         }
