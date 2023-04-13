@@ -59,7 +59,7 @@ function Cell() {
     const getValue = () => value
 
     return {
-        addMark,
+        addToken,
         getValue
     }
 }
