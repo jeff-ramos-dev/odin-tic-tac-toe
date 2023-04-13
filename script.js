@@ -1,4 +1,5 @@
-//GAMEBOARD FUNCTION
+// should see if I can map over board instead of use nested for loops everywhere?
+// also figure out if there's a cleaner way to check the win condition.
 function Gameboard() {
     const rows = 3
     const columns = 3
@@ -48,7 +49,6 @@ function Gameboard() {
     }
 }
 
-// CELL FUNCTION
 function Cell() {
     let value = "";
 
@@ -64,14 +64,11 @@ function Cell() {
     }
 }
 
-// GAME CONTROLLER FUNCTION
 function GameController(
     playerOneName = "Player One",
     playerTwoName = "Player Two"
 ) {
     const board = Gameboard()
-
-    let win = false
 
     const players = [
         {
@@ -84,19 +81,21 @@ function GameController(
         }
     ];
 
+    let activePlayer = players[0];
+
+    const toggleMenu = () => {
+        const form = document.querySelector('.names')
+        form.classList.toggle('hidden')
+    }
+
     const setPlayerNames = () => {
         const playerOne = document.getElementById('playerOne')
         const playerTwo = document.getElementById('playerTwo')
-        const form = document.querySelector('.names')
         const playerTurnDiv = document.querySelector('.turn')
         players[0].name = playerOne.value
         players[1].name = playerTwo.value
-
         playerTurnDiv.textContent = `${playerOne.value}'s turn`
-        form.classList.add('hidden')
     }
-
-    let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -116,9 +115,9 @@ function GameController(
             rowCount = 0
             for (let j = 0; j < 3; j++) {
                 if (board.getBoard()[i][j].getValue() === token) {
+                    rowCount++
                     switch (j) {
                         case (0):
-                            rowCount++
                             columnOneCount++
                             if (i === 0) {
                                 diagTopLeftCount++
@@ -127,7 +126,6 @@ function GameController(
                             }
                             break;
                         case (1):
-                            rowCount++
                             columnTwoCount++
                             if (i === 1) {
                                 diagTopLeftCount++
@@ -135,7 +133,6 @@ function GameController(
                             }
                             break;
                         case (2):
-                            rowCount++
                             columnThreeCount++
                             if (i === 0) {
                                 diagBotLeftCount++
@@ -143,8 +140,6 @@ function GameController(
                                 diagTopLeftCount++
                             } 
                             break; 
-                        default:
-                            break;
                     }
                     if (rowCount === 3 ||
                         columnOneCount === 3 ||
@@ -160,57 +155,71 @@ function GameController(
         }
         return false
     }
+    
+    const checkForDraw = () => {
+        let count = 0
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board.getBoard()[i][j].getValue() !== "") {
+                    count++
+                }
+            }
+        }
+        if (count === 9) {
+            return true
+        }
+        return false
+    }
 
     const playRound = (row, column) => {
         if (row > 2 || column > 2 || row < 0 || column < 0) {
-            console.log('invalid cell')
             return false
         }
         const mark = board.makeMove(row, column, getActivePlayer().token);
+        
         if (!mark) {
             return false
         }
 
         if (checkForWin()) {
+            return "win"
+        }
 
-            return true
+        if (checkForDraw()) {
+            return "draw"
         }
 
         switchPlayerTurn();
+
         return false
     };
 
-    const submit = document.querySelector('.submit')
-    submit.addEventListener('click', (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         setPlayerNames()
         const reset = document.querySelector('.reset')
         reset.style.display = 'block'
-    })
+        toggleMenu()
+    }
+
+    const submit = document.querySelector('.submit')
+
+    submit.addEventListener('click', handleSubmit)
 
     return {
         playRound,
         getActivePlayer,
         getBoard: board.getBoard,
+        handleSubmit
     }
 }
 
-// SCREEN CONTROLLER FUNCTION
 function ScreenController() {
     const game = GameController();
     const playerTurnDiv = document.querySelector('.turn')
     const boardDiv = document.querySelector('.board')
 
-    let win = false
-
-    const updateScreen = () => {
-        boardDiv.textContent = ''
-
-        const board = game.getBoard()
-        const activePlayer = game.getActivePlayer()
-
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
-
+    const updateBoard = (board) => {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 const cellButton = document.createElement('button')
@@ -221,32 +230,58 @@ function ScreenController() {
                 boardDiv.appendChild(cellButton)
             }
         }
+    }
 
-        if (win) {
-            playerTurnDiv.textContent = `${activePlayer.name} WON!!!`
-            boardDiv.removeEventListener('click', clickHandlerBoard)
-        }
+    const updateScreen = () => {
+        boardDiv.textContent = ''
+
+        const board = game.getBoard()
+        const activePlayer = game.getActivePlayer()
+
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+
+        updateBoard(board)
     }
 
     function clickHandlerBoard(e) {
         const selectedRow = e.target.dataset.row
         const selectedColumn = e.target.dataset.column
+        const board = game.getBoard()
+        const submit = document.querySelector('.submit')
         if (!selectedRow || !selectedColumn) return
 
-        if (game.playRound(selectedRow, selectedColumn)) {
-            win = true
+        gameState = game.playRound(selectedRow, selectedColumn)
+        if (gameState === "win") {
+            activePlayer = game.getActivePlayer()
+            playerTurnDiv.textContent = `${activePlayer.name} WON!!!`
+            boardDiv.removeEventListener('click', clickHandlerBoard)
+            boardDiv.textContent = ''
+            submit.removeEventListener('click', game.handleSubmit)
+
+            updateBoard(board)
+            return 
+        } else if (gameState === "draw") {
+            playerTurnDiv.textContent = "It's a Draw!"
+            boardDiv.removeEventListener('click', clickHandlerBoard)
+            boardDiv.textContent = ''
+            submit.removeEventListener('click', game.handleSubmit)
+
+            updateBoard(board)
+            return
         }
+
         updateScreen()
     }
 
     boardDiv.addEventListener('click', clickHandlerBoard)
-
 
     updateScreen()
 }
 
 ScreenController()
 
+
+// feels like everything below should be inside a function somewhere, but idk where
 const reset = document.querySelector('.reset')
 reset.addEventListener('click', (e) => {
     e.preventDefault()
@@ -255,4 +290,3 @@ reset.addEventListener('click', (e) => {
     form.classList.remove('hidden')
     reset.style.display = 'none'
 })
-
