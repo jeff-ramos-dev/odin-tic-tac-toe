@@ -60,6 +60,7 @@ button {
 .name-input {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .name-input label {
