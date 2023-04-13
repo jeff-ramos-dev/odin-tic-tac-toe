@@ -166,7 +166,7 @@ function GameController(
             console.log('invalid cell')
             return false
         }
-        const mark = board.makeMark(row, column, getActivePlayer().token);
+        const mark = board.makeMove(row, column, getActivePlayer().token);
         if (!mark) {
             return false
         }
