@@ -41,7 +41,8 @@ body {
 }
 
 button {
-    font-size: 3rem;
+    font-size: 3;
+    color: black;
 }
 
 .names {
@@ -59,6 +60,7 @@ button {
 .name-input {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .name-input label {
