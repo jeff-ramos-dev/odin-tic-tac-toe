@@ -5,6 +5,16 @@
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
+:root {
+    --bg-color: #393646;
+    --menu-color: #4F4557;
+    --tokenX-color: #66347F;
+    --tokenO-color: #B8621B;
+    --start-color: #03C988;
+    --reset-color: #D27685;
+    --white-text-color: #F4EEE0;
+}
+
 body {
     display: grid;
     grid-template-rows: 100px 1fr;
@@ -12,8 +22,16 @@ body {
     background-color: black;
 }
 
+.board > .X {
+    color: var(--tokenX-color)
+}
+
+.board > .O {
+    color: var(--tokenO-color)
+}
+
 .title {
-    color: white;
+    color: var(--white-text-color);
     text-align: center;
 }
 
@@ -23,13 +41,13 @@ body {
     grid-template-rows: 80px 1fr;
     height: 400px;
     width: 400px;
-    border: 2px solid white;
+    border: 2px solid var(--white-text-color);
 }
 
 .turn {
     text-align: center;
     margin-top: 20px;
-    color: white;
+    color: var(--white-text-color);
 }
 
 .board {
@@ -37,7 +55,7 @@ body {
     gap: 5px;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    background-color: purple;
+    background-color: var(--menu-color);
 }
 
 button {
@@ -52,7 +70,7 @@ button {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    background-color: purple;
+    background-color: var(--menu-color);
     height: 100%;
     width: 100%;
 }
@@ -64,7 +82,7 @@ button {
 }
 
 .name-input label {
-    color: white;
+    color: var(--white-text-color);
 }
 
 .name-input input {
@@ -83,10 +101,10 @@ button {
     margin-top: 20px;
     padding: 5px 15px;
     border-radius: 5px;
-    background-color: green;
+    background-color: var(--start-color);
 }
 
 .reset {
-    background-color: red;
+    background-color: var(--reset-color);
     display: none;
 }

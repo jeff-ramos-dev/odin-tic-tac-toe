@@ -224,6 +224,11 @@ function ScreenController() {
             for (let j = 0; j < 3; j++) {
                 const cellButton = document.createElement('button')
                 cellButton.classList.add('cell')
+                if (board[i][j].getValue() === 'X') {
+                    cellButton.classList.add('X')
+                } else if (board[i][j].getValue() === 'O') {
+                    cellButton.classList.add('O')
+                }
                 cellButton.dataset.row = i
                 cellButton.dataset.column = j
                 cellButton.textContent = board[i][j].getValue()
