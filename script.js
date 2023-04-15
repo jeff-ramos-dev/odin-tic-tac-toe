@@ -8,21 +8,7 @@ function Gameboard() {
     const getBoard = () => board
 
     const makeMove = (row, column, token) => {
-        const availableCells = [] 
-        let r = rows
-        let c = columns
-        for (let i = 0; i < r; i++) {
-            availableCells[i] = []
-            for (let j = 0; j < c; j++) {
-                if (board[i][j].getValue() === '') {
-                    availableCells[i].push(true)
-                } else {
-                    availableCells[i].push(false)
-                }
-            }
-        }
-
-        const cell = availableCells[row][column] ? board[row][column] : console.log('invalid cell')
+        const cell = board[row][column].getValue() ? console.log('invalid cell') : board[row][column]
 
         if (!cell) return false
         
@@ -203,7 +189,6 @@ function GameController(
     }
 
     const submit = document.querySelector('.submit')
-
     submit.addEventListener('click', handleSubmit)
 
     return {
