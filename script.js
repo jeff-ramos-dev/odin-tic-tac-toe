@@ -1,5 +1,4 @@
-// should see if I can map over board instead of use nested for loops everywhere?
-// also figure out if there's a cleaner way to check the win condition.
+
 function Gameboard() {
     const rows = 3
     const columns = 3
@@ -180,12 +179,14 @@ function GameController(
         return false
     };
 
-    const handleSubmit = (e) => {
+    function handleSubmit(e) {
         e.preventDefault()
+        console.log('handleSubmit fired')
         setPlayerNames()
         const reset = document.querySelector('.reset')
         reset.style.display = 'block'
         toggleMenu()
+        submit.removeEventListener('click', handleSubmit)
     }
 
     const submit = document.querySelector('.submit')
