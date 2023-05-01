@@ -1,3 +1,17 @@
+function Cell() {
+    let value = "";
+
+    const addToken = (token) => {
+        value = token;
+    }
+
+    const getValue = () => value
+
+    return {
+        addToken,
+        getValue
+    }
+}
 
 function Gameboard() {
     const rows = 3
@@ -34,25 +48,13 @@ function Gameboard() {
     }
 }
 
-function Cell() {
-    let value = "";
 
-    const addToken = (token) => {
-        value = token;
-    }
-
-    const getValue = () => value
-
-    return {
-        addToken,
-        getValue
-    }
-}
 
 function GameController(
     playerOneName = "Player One",
     playerTwoName = "Player Two"
 ) {
+
     const board = Gameboard()
 
     const players = [
@@ -181,7 +183,6 @@ function GameController(
 
     function handleSubmit(e) {
         e.preventDefault()
-        console.log('handleSubmit fired')
         setPlayerNames()
         const reset = document.querySelector('.reset')
         reset.style.display = 'block'
@@ -238,16 +239,14 @@ function ScreenController() {
         const selectedRow = e.target.dataset.row
         const selectedColumn = e.target.dataset.column
         const board = game.getBoard()
-        const submit = document.querySelector('.submit')
         if (!selectedRow || !selectedColumn) return
 
-        gameState = game.playRound(selectedRow, selectedColumn)
+        const gameState = game.playRound(selectedRow, selectedColumn)
         if (gameState === "win") {
             activePlayer = game.getActivePlayer()
             playerTurnDiv.textContent = `${activePlayer.name} WON!!!`
             boardDiv.removeEventListener('click', clickHandlerBoard)
             boardDiv.textContent = ''
-            submit.removeEventListener('click', game.handleSubmit)
 
             updateBoard(board)
             return 
@@ -255,11 +254,10 @@ function ScreenController() {
             playerTurnDiv.textContent = "It's a Draw!"
             boardDiv.removeEventListener('click', clickHandlerBoard)
             boardDiv.textContent = ''
-            submit.removeEventListener('click', game.handleSubmit)
 
             updateBoard(board)
             return
-        }
+        } 
 
         updateScreen()
     }
@@ -272,7 +270,6 @@ function ScreenController() {
 ScreenController()
 
 
-// feels like everything below should be inside a function somewhere, but idk where
 const reset = document.querySelector('.reset')
 reset.addEventListener('click', (e) => {
     e.preventDefault()
