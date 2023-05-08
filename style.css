@@ -1,110 +1,121 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
 :root {
-    --bg-color: #393646;
-    --menu-color: #4F4557;
-    --tokenX-color: #66347F;
-    --tokenO-color: #B8621B;
-    --start-color: #03C988;
-    --reset-color: #D27685;
-    --white-text-color: #F4EEE0;
+  --bg-color: #393646;
+  --menu-color: #4F4557;
+  --tokenX-color: #66347F;
+  --tokenO-color: #B8621B;
+  --start-color: #03C988;
+  --reset-color: #D27685;
+  --white-text-color: #F4EEE0;
 }
 
 body {
-    display: grid;
-    grid-template-rows: 100px 1fr;
-    place-items: center;
-    background-color: black;
+  display: grid;
+  height: 100vh;
+  place-items: center;
+  background-color: black;
 }
 
-.board > .X {
-    color: var(--tokenX-color)
+.board>.X {
+  color: var(--tokenX-color)
 }
 
-.board > .O {
-    color: var(--tokenO-color)
+.board>.O {
+  color: var(--tokenO-color)
 }
 
 .title {
-    color: var(--white-text-color);
-    text-align: center;
+  color: var(--white-text-color);
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: -50px;
 }
 
 .container {
-    position: relative;
-    display: grid;
-    grid-template-rows: 80px 1fr;
-    height: 400px;
-    width: 400px;
-    border: 2px solid var(--white-text-color);
+  position: relative;
+  display: grid;
+  margin: 20px;
+  grid-template-rows: 80px 1fr;
+  width: min(400px, 80vw);
+  height: min(400px, 80vw);
+  min-width: 300px;
+  min-height: 300px;
+  border: 2px solid var(--white-text-color);
 }
 
 .turn {
-    text-align: center;
-    margin-top: 20px;
-    color: var(--white-text-color);
+  text-align: center;
+  margin-top: 20px;
+  color: var(--white-text-color);
+  font-size: x-large;
 }
 
 .board {
-    display: grid;
-    gap: 5px;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    background-color: var(--menu-color);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  background-color: var(--menu-color);
 }
 
 button {
-    font-size: 3rem;
-    color: black;
+  font-size: 3rem;
+  color: black;
+}
+
+.cell {
+  border: 5px solid black;
 }
 
 .names {
-    position: absolute;
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    background-color: var(--menu-color);
-    height: 100%;
-    width: 100%;
+  position: absolute;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--menu-color);
+  height: 100%;
+  width: 100%;
 }
 
 .name-input {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .name-input label {
-    color: var(--white-text-color);
+  color: var(--white-text-color);
 }
 
 .name-input input {
-    margin-top: 10px;
-    padding-left: 5px;
-    height: 30px;
-    border-radius: 10px;
+  margin-top: 10px;
+  padding-left: 5px;
+  height: 30px;
+  border-radius: 10px;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
-.submit, .reset {
-    font-size: 1.5rem;
-    margin-top: 20px;
-    padding: 5px 15px;
-    border-radius: 5px;
-    background-color: var(--start-color);
+.submit,
+.reset {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  padding: 5px 15px;
+  border-radius: 5px;
+  background-color: var(--start-color);
 }
 
 .reset {
-    background-color: var(--reset-color);
-    display: none;
+  background-color: var(--reset-color);
+  display: none;
 }
