@@ -116,6 +116,11 @@ button {
 }
 
 .reset {
+  position: absolute;
+  width: 120px;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: var(--reset-color);
   display: none;
 }
